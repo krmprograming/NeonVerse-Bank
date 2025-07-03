@@ -10,10 +10,9 @@
 <body>
 
   <header>
-  <img src="img/logo-neonverse.png" alt="Logo NeonVerse Bank" class="logo" />
-  <div>🌌 NeonVerse Bank - Sua Jornada Começa Aqui</div>
-</header>
-
+    <img src="img/logo-neonverse.png" alt="Logo NeonVerse Bank" class="logo" />
+    <div>🌌 NeonVerse Bank - Sua Jornada Começa Aqui</div>
+  </header>
 
   <div class="container" id="loginSection">
     <div class="card">
@@ -24,10 +23,18 @@
         <button type="submit">Entrar</button>
       </form>
     </div>
+
+    <div class="card">
+      <h2>📝 Cadastre-se</h2>
+      <form id="registerForm">
+        <input type="text" id="newUsername" placeholder="Novo nome de usuário" required />
+        <input type="password" id="newPassword" placeholder="Nova senha" required />
+        <button type="submit">Cadastrar</button>
+      </form>
+    </div>
   </div>
 
   <div class="container" id="dashboardSection" style="display: none;">
-
     <div class="card">
       <h2>👤 Bem-vindo(a), <span id="userName">Usuário</span></h2>
       <p class="balance">💰 Saldo atual: <strong>R$ 4.230,00</strong></p>
@@ -68,25 +75,51 @@
       bot.style.display = bot.style.display === "none" ? "block" : "none";
     }
 
-    // Simula login e carrega dashboard
     const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
     const loginSection = document.getElementById("loginSection");
     const dashboardSection = document.getElementById("dashboardSection");
     const userNameSpan = document.getElementById("userName");
 
+    // Login
     if (loginForm) {
       loginForm.addEventListener("submit", function (e) {
         e.preventDefault();
         const username = document.getElementById("username").value;
-        sessionStorage.setItem("username", username);
-        userNameSpan.textContent = username;
-        loginSection.style.display = "none";
-        dashboardSection.style.display = "block";
-        showChart();
+        const password = document.getElementById("password").value;
+
+        const storedPassword = localStorage.getItem(username);
+        if (storedPassword && storedPassword === password) {
+          sessionStorage.setItem("username", username);
+          userNameSpan.textContent = username;
+          loginSection.style.display = "none";
+          dashboardSection.style.display = "block";
+          showChart();
+        } else {
+          alert("❌ Nome de usuário ou senha incorretos.");
+        }
       });
     }
 
-    // Gráfico de gastos
+    // Cadastro
+    if (registerForm) {
+      registerForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const newUsername = document.getElementById("newUsername").value;
+        const newPassword = document.getElementById("newPassword").value;
+
+        if (localStorage.getItem(newUsername)) {
+          alert("⚠️ Usuário já existe. Escolha outro nome.");
+          return;
+        }
+
+        localStorage.setItem(newUsername, newPassword);
+        alert("✅ Cadastro realizado com sucesso! Faça login.");
+        registerForm.reset();
+      });
+    }
+
+    // Gráfico
     function showChart() {
       const chartCanvas = document.getElementById("gastosChart");
       if (chartCanvas) {
@@ -109,7 +142,7 @@
       }
     }
 
-    // Objetivos de economia
+    // Objetivos
     const goalForm = document.getElementById("goalForm");
     const goalList = document.getElementById("goalList");
 
@@ -125,13 +158,13 @@
       });
     }
 
-    // Mostra NeoBot depois de 5s
+    // Exibe bot depois de 5s
     setTimeout(() => {
       const bot = document.getElementById("neoBotMessage");
       if (bot) bot.style.display = "block";
     }, 5000);
 
-    // Caso o usuário já tenha feito login
+    // Login automático se já feito
     window.onload = function () {
       const username = sessionStorage.getItem("username");
       if (username) {
