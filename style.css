@@ -13,9 +13,7 @@ body {
   min-height: 100vh;
 }
 
-/* ===============================
-   Cabeçalho
-================================== */
+/* Cabeçalho */
 header {
   background: linear-gradient(90deg, #0ff, #8000ff);
   padding: 20px;
@@ -30,36 +28,14 @@ header {
   align-items: center;
 }
 
-/* Logo animada NeonVerse */
-.logo {
-  width: 160px;
-  max-width: 90%;
-  height: auto;
-  margin-bottom: 10px;
-  filter: drop-shadow(0 0 10px #0ff);
-  animation: logoPulse 3s infinite ease-in-out;
-}
-
-@keyframes logoPulse {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 10px #0ff);
-  }
-  50% {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 20px #ff00ff);
-  }
-}
-
-/* ===============================
-   Container e Cartões
-================================== */
+/* Container principal */
 .container {
   padding: 30px;
   max-width: 900px;
   margin: auto;
 }
 
+/* Cartões */
 .card {
   background: #1a1a40;
   border: 1px solid #0ff;
@@ -74,12 +50,14 @@ header {
   transform: translateY(-5px);
 }
 
+/* Títulos */
 h2 {
   color: #0ff;
   margin-bottom: 15px;
   user-select: none;
 }
 
+/* Saldo */
 .balance {
   font-size: 2.2rem;
   margin: 15px 0;
@@ -87,9 +65,7 @@ h2 {
   user-select: text;
 }
 
-/* ===============================
-   Formulários
-================================== */
+/* Formulários */
 form {
   display: flex;
   flex-wrap: wrap;
@@ -117,6 +93,7 @@ input[type="number"]:focus {
   background: #1f1f50;
 }
 
+/* Botões */
 button {
   background: #0ff;
   color: #000;
@@ -138,9 +115,7 @@ button:focus {
   outline: none;
 }
 
-/* ===============================
-   Missões e Objetivos
-================================== */
+/* Lista de missões e objetivos */
 .missions {
   list-style: none;
   padding-left: 15px;
@@ -152,9 +127,7 @@ button:focus {
   user-select: text;
 }
 
-/* ===============================
-   NeoBot Flutuante
-================================== */
+/* NeoBot botão flutuante */
 #chat {
   position: fixed;
   bottom: 20px;
@@ -178,6 +151,7 @@ button:focus {
   outline: none;
 }
 
+/* Mensagem do NeoBot */
 #neoBotMessage {
   position: fixed;
   bottom: 80px;
@@ -201,30 +175,14 @@ button:focus {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===============================
-   Gráfico
-================================== */
+/* Canvas do gráfico */
 canvas {
   max-width: 100%;
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
 }
 
-/* ===============================
-   WalletScan Imagem
-================================== */
-.walletscan-img {
-  width: 200px;
-  max-width: 100%;
-  display: block;
-  margin: 0 auto 10px;
-  filter: drop-shadow(0 0 8px #0ff);
-  border-radius: 12px;
-}
-
-/* ===============================
-   Responsivo
-================================== */
+/* Responsividade */
 @media (max-width: 600px) {
   .container {
     padding: 20px 15px;
