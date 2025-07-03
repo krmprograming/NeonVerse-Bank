@@ -1,11 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeonVerse Bank</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NeonVerse Bank 🌌</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <p> Seja bem Vindo(a) ao seu Mundo de Economias</p>
+
+  <header>
+    🚀 NeonVerse Bank - Sua Jornada Começa Aqui
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Olá, Explorador Galáctico 👽</h2>
+      <p class="balance">💰 Saldo atual: <strong>R$ 4.230,00</strong></p>
+    </div>
+
+    <div class="card">
+      <h2>🎯 Missões Financeiras de Hoje</h2>
+      <ul class="missions">
+        <li>✅ Transferir R$50 para poupança (+50 XP)</li>
+        <li>✅ Criar um objetivo de economia (+30 XP)</li>
+        <li>❌ Organizar seus gastos do mês (+100 XP)</li>
+      </ul>
+      <button onclick="alert('Parabéns! Você completou uma missão!')">Concluir Missão</button>
+    </div>
+
+  </div>
+
+  <!-- Botão e Mensagem do NeoBot -->
+  <div id="neoBotMessage">👋 Olá! Eu sou o NeoBot. Posso te ajudar com transferências, saldos e objetivos.</div>
+  <button id="chat" onclick="toggleBot()">💬</button>
+
+  <script>
+    function toggleBot() {
+      const bot = document.getElementById("neoBotMessage");
+      bot.style.display = bot.style.display === "none" ? "block" : "none";
+    }
+
+    // Mostrar mensagem do bot após alguns segundos
+    setTimeout(() => {
+      document.getElementById("neoBotMessage").style.display = "block";
+    }, 5000);
+  </script>
+
 </body>
 </html>
