@@ -5,34 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NeonVerse Bank 🌌</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
   <header>
-    🚀 NeonVerse Bank - Sua Jornada Começa Aqui
+    🌌 NeonVerse Bank - Sua Jornada Começa Aqui
   </header>
 
-  <div class="container">
+  <div class="container" id="loginSection">
+    <div class="card">
+      <h2>🔐 Login</h2>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Seu nome" required />
+        <input type="password" id="password" placeholder="Senha" required />
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container" id="dashboardSection" style="display: none;">
 
     <div class="card">
-      <h2>Olá, Explorador Galáctico 👽</h2>
+      <h2>👤 Bem-vindo(a), <span id="userName">Usuário</span></h2>
       <p class="balance">💰 Saldo atual: <strong>R$ 4.230,00</strong></p>
     </div>
 
     <div class="card">
-      <h2>🎯 Missões Financeiras de Hoje</h2>
-      <ul class="missions">
-        <li>✅ Transferir R$50 para poupança (+50 XP)</li>
-        <li>✅ Criar um objetivo de economia (+30 XP)</li>
-        <li>❌ Organizar seus gastos do mês (+100 XP)</li>
-      </ul>
-      <button onclick="alert('Parabéns! Você completou uma missão!')">Concluir Missão</button>
+      <h2>📊 Seus Gastos do Mês</h2>
+      <canvas id="gastosChart" width="400" height="200"></canvas>
     </div>
 
+    <div class="card">
+      <h2>🎯 Objetivos de Economia</h2>
+      <form id="goalForm">
+        <input type="text" id="goalName" placeholder="Ex: Novo notebook" required />
+        <input type="number" id="goalValue" placeholder="Valor R$" required />
+        <button type="submit">Adicionar Objetivo</button>
+      </form>
+      <ul id="goalList" class="missions"></ul>
+    </div>
+
+    <div class="card">
+      <h2>💡 Missões Financeiras</h2>
+      <ul class="missions">
+        <li>✅ Transferir R$50 para poupança (+50 XP)</li>
+        <li>✅ Criar objetivo de economia (+30 XP)</li>
+        <li>❌ Analisar gastos da semana (+100 XP)</li>
+      </ul>
+    </div>
   </div>
 
-  <!-- Botão e Mensagem do NeoBot -->
-  <div id="neoBotMessage">👋 Olá! Eu sou o NeoBot. Posso te ajudar com transferências, saldos e objetivos.</div>
+  <!-- Assistente Virtual NeoBot -->
+  <div id="neoBotMessage">👋 Olá! Eu sou o NeoBot. Posso te ajudar com saldo, objetivos e dicas financeiras.</div>
   <button id="chat" onclick="toggleBot()">💬</button>
 
   <script>
@@ -41,11 +66,79 @@
       bot.style.display = bot.style.display === "none" ? "block" : "none";
     }
 
-    // Mostrar mensagem do bot após alguns segundos
-    setTimeout(() => {
-      document.getElementById("neoBotMessage").style.display = "block";
-    }, 5000);
-  </script>
+    // Simula login e carrega dashboard
+    const loginForm = document.getElementById("loginForm");
+    const loginSection = document.getElementById("loginSection");
+    const dashboardSection = document.getElementById("dashboardSection");
+    const userNameSpan = document.getElementById("userName");
 
+    if (loginForm) {
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        sessionStorage.setItem("username", username);
+        userNameSpan.textContent = username;
+        loginSection.style.display = "none";
+        dashboardSection.style.display = "block";
+        showChart();
+      });
+    }
+
+    // Gráfico de gastos
+    function showChart() {
+      const chartCanvas = document.getElementById("gastosChart");
+      if (chartCanvas) {
+        new Chart(chartCanvas, {
+          type: "bar",
+          data: {
+            labels: ["Alimentação", "Transporte", "Lazer", "Contas", "Outros"],
+            datasets: [{
+              label: 'Gastos (R$)',
+              data: [800, 300, 450, 600, 200],
+              backgroundColor: '#0ff',
+              borderRadius: 5
+            }]
+          },
+          options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+      }
+    }
+
+    // Objetivos de economia
+    const goalForm = document.getElementById("goalForm");
+    const goalList = document.getElementById("goalList");
+
+    if (goalForm && goalList) {
+      goalForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const name = document.getElementById("goalName").value;
+        const value = document.getElementById("goalValue").value;
+        const li = document.createElement("li");
+        li.textContent = `🎯 ${name} - R$ ${value}`;
+        goalList.appendChild(li);
+        goalForm.reset();
+      });
+    }
+
+    // Mostra NeoBot depois de 5s
+    setTimeout(() => {
+      const bot = document.getElementById("neoBotMessage");
+      if (bot) bot.style.display = "block";
+    }, 5000);
+
+    // Caso o usuário já tenha feito login
+    window.onload = function () {
+      const username = sessionStorage.getItem("username");
+      if (username) {
+        userNameSpan.textContent = username;
+        loginSection.style.display = "none";
+        dashboardSection.style.display = "block";
+        showChart();
+      }
+    };
+  </script>
 </body>
 </html>
