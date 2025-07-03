@@ -11,6 +11,7 @@
 
   <header>
     <img src="img/logo-neonverse.png" alt="Logo NeonVerse Bank" class="logo" />
+    <img src="img/logo-neobot.png" alt="Logo NeoBot" class="logo" />
     <div>🌌 NeonVerse Bank - Sua Jornada Começa Aqui</div>
   </header>
 
@@ -63,6 +64,13 @@
         <li>❌ Analisar gastos da semana (+100 XP)</li>
       </ul>
     </div>
+
+    <!-- Novo Card: WalletScan -->
+    <div class="card">
+      <h2>🔍 WalletScan</h2>
+      <img src="img/walletscan-icon.png" alt="Ícone WalletScan" class="walletscan-img" />
+      <p style="text-align:center;">Analise seus bancos com segurança.</p>
+    </div>
   </div>
 
   <!-- Assistente Virtual NeoBot -->
@@ -81,7 +89,6 @@
     const dashboardSection = document.getElementById("dashboardSection");
     const userNameSpan = document.getElementById("userName");
 
-    // Login
     if (loginForm) {
       loginForm.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -101,7 +108,6 @@
       });
     }
 
-    // Cadastro
     if (registerForm) {
       registerForm.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -119,7 +125,6 @@
       });
     }
 
-    // Gráfico
     function showChart() {
       const chartCanvas = document.getElementById("gastosChart");
       if (chartCanvas) {
@@ -142,7 +147,6 @@
       }
     }
 
-    // Objetivos
     const goalForm = document.getElementById("goalForm");
     const goalList = document.getElementById("goalList");
 
@@ -158,13 +162,11 @@
       });
     }
 
-    // Exibe bot depois de 5s
     setTimeout(() => {
       const bot = document.getElementById("neoBotMessage");
       if (bot) bot.style.display = "block";
     }, 5000);
 
-    // Login automático se já feito
     window.onload = function () {
       const username = sessionStorage.getItem("username");
       if (username) {
