@@ -205,3 +205,24 @@ canvas {
     right: 5%;
   }
 }
+/* Logo personalizada */
+.logo {
+  width: 160px;
+  max-width: 90%;
+  height: auto;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 10px #0ff);
+  animation: logoPulse 3s infinite ease-in-out;
+}
+
+/* Animação suave na logo */
+@keyframes logoPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px #0ff);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px #ff00ff);
+  }
+}
