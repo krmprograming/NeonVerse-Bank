@@ -1,178 +1,314 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NeonVerse Bank 🌌</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Oficina Flow - Gerenciador de Demanda para Mecânicos</title>
+  <style>
+    :root {
+      --primary: #e63946;
+      --primary-dark: #b32d38;
+      --dark: #1d3557;
+      --gray: #457b9d;
+      --light: #f1faee;
+      --success: #2a9d8f;
+      --warning: #f4a261;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+      color: var(--dark);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--dark);
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--gray);
+    }
+
+    .btn-secondary:hover {
+      background: #36637f;
+    }
+
+    .btn-success {
+      background: var(--success);
+    }
+
+    .btn-success:hover {
+      background: #21867a;
+    }
+
+    .vehicles-list, .order-list {
+      margin-top: 20px;
+    }
+
+    .vehicle-item {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+      background: #fafcff;
+    }
+
+    .vehicle-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .urgent {
+      background: #fff3f3;
+      border-left: 5px solid var(--primary);
+    }
+
+    .completed {
+      background: #f0fdf4;
+      border-left: 5px solid var(--success);
+      opacity: 0.85;
+    }
+
+    .task-list {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+
+    .task-item {
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .done {
+      text-decoration: line-through;
+      color: #888;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .badge-urgent { background: var(--primary); color: white; }
+    .badge-done { background: var(--success); color: white; }
+
+    #order-suggestion {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .vehicle-header { flex-direction: column; align-items: flex-start; }
+      .vehicle-header h3 { margin-bottom: 8px; }
+    }
+  </style>
 </head>
 <body>
 
+<div class="container">
   <header>
-    <div><img src=" unnamed (1).png " alt="Logo do site">
- NeonVerse Bank - Sua Jornada Começa Aqui</div>
+    <h1>Oficina Flow</h1>
+    <p class="subtitle">Gerenciador de demandas para mecânicos • Otimiza a ordem dos serviços</p>
   </header>
 
-  <div class="container" id="loginSection">
-    <div class="card">
-      <h2>🔐 Login</h2>
-      <form id="loginForm">
-        <input type="text" id="username" placeholder="Seu nome" required />
-        <input type="password" id="password" placeholder="Senha" required />
-        <button type="submit">Entrar</button>
-      </form>
+  <div class="card">
+    <h2>Adicionar Veículo</h2>
+    <div class="form-group">
+      <label>Placa / Apelido</label>
+      <input type="text" id="placa" placeholder="Ex: ABC1D23 ou Gol do João" />
     </div>
-
-    <div class="card">
-      <h2>📝 Cadastre-se</h2>
-      <form id="registerForm">
-        <input type="text" id="newUsername" placeholder="Novo nome de usuário" required />
-        <input type="password" id="newPassword" placeholder="Nova senha" required />
-        <button type="submit">Cadastrar</button>
-      </form>
+    <div class="form-group">
+      <label>Modelo / Ano</label>
+      <input type="text" id="modelo" placeholder="Ex: Gol G5 2012" />
     </div>
+    <div class="form-group">
+      <label>Urgente?</label>
+      <select id="urgente">
+        <option value="false">Não</option>
+        <option value="true">Sim 🚨</option>
+      </select>
+    </div>
+    <button onclick="adicionarVeiculo()">Adicionar Veículo</button>
   </div>
 
-  <div class="container" id="dashboardSection" style="display: none;">
-    <div class="card">
-      <h2>👤 Bem-vindo(a), <span id="userName">Usuário</span></h2>
-      <p class="balance">💰 Saldo atual: <strong>R$ 4.230,00</strong></p>
+  <div class="card">
+    <h2>Adicionar Tarefa</h2>
+    <div class="form-group">
+      <label>Veículo (placa/apelido)</label>
+      <input type="text" id="tarefaPlaca" list="veiculosDatalist" placeholder="Digite ou selecione" />
+      <datalist id="veiculosDatalist"></datalist>
     </div>
-
-    <div class="card">
-      <h2>📊 Seus Gastos do Mês</h2>
-      <canvas id="gastosChart" width="400" height="200"></canvas>
+    <div class="form-group">
+      <label>Descrição do serviço</label>
+      <input type="text" id="descricao" placeholder="Ex: Troca de óleo + filtro" />
     </div>
-
-    <div class="card">
-      <h2>🎯 Objetivos de Economia</h2>
-      <form id="goalForm">
-        <input type="text" id="goalName" placeholder="Ex: Novo notebook" required />
-        <input type="number" id="goalValue" placeholder="Valor R$" required />
-        <button type="submit">Adicionar Objetivo</button>
-      </form>
-      <ul id="goalList" class="missions"></ul>
+    <div class="form-group">
+      <label>Tempo estimado (minutos)</label>
+      <input type="number" id="tempo" min="1" value="60" />
     </div>
-
-    <div class="card">
-      <h2>💡 Missões Financeiras</h2>
-      <ul class="missions">
-        <li>✅ Transferir R$50 para poupança (+50 XP)</li>
-        <li>✅ Criar objetivo de economia (+30 XP)</li>
-        <li>❌ Analisar gastos da semana (+100 XP)</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>🔍 WalletScan</h2>
-      <p style="text-align:center;">Analise seus bancos com segurança.</p>
-    </div>
+    <button onclick="adicionarTarefa()">Adicionar Tarefa</button>
   </div>
 
-  <!-- Assistente Virtual NeoBot -->
-  <div id="neoBotMessage">👋 Olá! Eu sou o NeoBot. Posso te ajudar com saldo, objetivos e dicas financeiras.</div>
-  <button id="chat" onclick="toggleBot()">💬</button>
+  <div class="card" id="order-suggestion">
+    <h2>Ordem Sugerida <small>(urgentes + mais rápidos primeiro)</small></h2>
+    <button onclick="gerarOrdemSugerida()" style="margin-bottom: 16px;">Atualizar Ordem</button>
+    <div id="ordemLista" class="order-list"></div>
+  </div>
 
-  <script>
-    function toggleBot() {
-      const bot = document.getElementById("neoBotMessage");
-      bot.style.display = bot.style.display === "none" ? "block" : "none";
+  <div class="card">
+    <h2>Veículos na Oficina</h2>
+    <button onclick="listarVeiculos()" style="margin-bottom: 16px;">Atualizar Lista</button>
+    <div id="veiculosLista" class="vehicles-list"></div>
+  </div>
+
+  <div class="card">
+    <h2>Estimativa de Mão de Obra Pendente</h2>
+    <button onclick="calcularCustoPendente()">Calcular</button>
+    <div id="custoResultado" style="margin-top: 16px; font-size: 1.1rem; font-weight: bold;"></div>
+  </div>
+
+  <footer>
+    Oficina Flow • Feito para otimizar o dia a dia da oficina • Salva automaticamente no navegador
+  </footer>
+</div>
+
+<script>
+  const STORAGE_KEY = "oficinaFlowVeiculos";
+  let veiculos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+  const custoHora = 180; // R$/hora - altere aqui
+
+  function salvar() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(veiculos));
+  }
+
+  function atualizarDatalist() {
+    const datalist = document.getElementById("veiculosDatalist");
+    datalist.innerHTML = "";
+    Object.keys(veiculos).forEach(placa => {
+      const opt = document.createElement("option");
+      opt.value = placa;
+      datalist.appendChild(opt);
+    });
+  }
+
+  function adicionarVeiculo() {
+    const placa = document.getElementById("placa").value.trim().toUpperCase();
+    const modelo = document.getElementById("modelo").value.trim();
+    const urgente = document.getElementById("urgente").value === "true";
+
+    if (!placa || !modelo) {
+      alert("Preencha placa e modelo!");
+      return;
     }
 
-    const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
-    const loginSection = document.getElementById("loginSection");
-    const dashboardSection = document.getElementById("dashboardSection");
-    const userNameSpan = document.getElementById("userName");
-
-    if (loginForm) {
-      loginForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-
-        const storedPassword = localStorage.getItem(username);
-        if (storedPassword && storedPassword === password) {
-          sessionStorage.setItem("username", username);
-          userNameSpan.textContent = username;
-          loginSection.style.display = "none";
-          dashboardSection.style.display = "block";
-          showChart();
-        } else {
-          alert("❌ Nome de usuário ou senha incorretos.");
-        }
-      });
+    if (veiculos[placa]) {
+      alert("Veículo já cadastrado!");
+      return;
     }
 
-    if (registerForm) {
-      registerForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const newUsername = document.getElementById("newUsername").value;
-        const newPassword = document.getElementById("newPassword").value;
-
-        if (localStorage.getItem(newUsername)) {
-          alert("⚠️ Usuário já existe. Escolha outro nome.");
-          return;
-        }
-
-        localStorage.setItem(newUsername, newPassword);
-        alert("✅ Cadastro realizado com sucesso! Faça login.");
-        registerForm.reset();
-      });
-    }
-
-    function showChart() {
-      const chartCanvas = document.getElementById("gastosChart");
-      if (chartCanvas) {
-        new Chart(chartCanvas, {
-          type: "bar",
-          data: {
-            labels: ["Alimentação", "Transporte", "Lazer", "Contas", "Outros"],
-            datasets: [{
-              label: 'Gastos (R$)',
-              data: [800, 300, 450, 600, 200],
-              backgroundColor: '#0ff',
-              borderRadius: 5
-            }]
-          },
-          options: {
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-          }
-        });
-      }
-    }
-
-    const goalForm = document.getElementById("goalForm");
-    const goalList = document.getElementById("goalList");
-
-    if (goalForm && goalList) {
-      goalForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const name = document.getElementById("goalName").value;
-        const value = document.getElementById("goalValue").value;
-        const li = document.createElement("li");
-        li.textContent = `🎯 ${name} - R$ ${value}`;
-        goalList.appendChild(li);
-        goalForm.reset();
-      });
-    }
-
-    setTimeout(() => {
-      const bot = document.getElementById("neoBotMessage");
-      if (bot) bot.style.display = "block";
-    }, 5000);
-
-    window.onload = function () {
-      const username = sessionStorage.getItem("username");
-      if (username) {
-        userNameSpan.textContent = username;
-        loginSection.style.display = "none";
-        dashboardSection.style.display = "block";
-        showChart();
-      }
+    veiculos[placa] = {
+      modelo,
+      urgente,
+      tarefas: [],
+      concluido: false,
+      data: new Date().toLocaleString("pt-BR")
     };
-  </script>
-</body>
-</html>
+
+    salvar();
+    atualizarDatalist();
+    alert(`Veículo ${placa} adicionado!`);
+    
+    // Limpa campos
+    document.getElementById("placa").value = "";
+    document.getElementById("modelo").value = "";
+  }
+
+  function adicionarTarefa() {
+    const placa = document.getElementById("tarefaPlaca").value.trim().toUpperCase();
+    const desc = document.getElementById("descricao").value.trim();
+    const tempo = parseInt(document.getElementById("tempo").value) || 60;
+
+    if (!veiculos[placa]) {
+      alert("Veículo não encontrado!");
+      return;
+    }
+    if (!
