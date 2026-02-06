@@ -1,388 +1,169 @@
+:root {
+  --color-canvas-default: #ffffff;
+  --color-canvas-subtle: #f6f8fa;
+  --color-border-default: #d0d7de;
+  --color-border-muted: #d8dee4;
+  --color-fg-default: #24292f;
+  --color-fg-muted: #57606a;
+  --color-accent-fg: #0969da;
+  --color-success-fg: #1a7f37;
+  --color-danger-fg: #cf222e;
+  --color-primer-shadow-highlight: rgba(255,255,255,0.5);
+  --color-primer-shadow-highlight-muted: rgba(255,255,255,0.2);
+  --color-scale-gray-0: #fafbfc;
+  --color-scale-gray-1: #f0f3f6;
+  --color-scale-gray-7: #2f363d;
+}
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Oficina Flow - Gerenciador de Demanda</title>
-  <style>
-    :root {
-      --bg: #0f1217;
-      --card: #1a1f27;
-      --text: #e0e7ff;
-      --text-muted: #94a3b8;
-      --primary: #e11d48;
-      --primary-dark: #be123c;
-      --success: #15803d;
-      --success-dark: #166534;
-      --urgent-border: #e11d48;
-      --gray: #475569;
-      --border: #334155;
-    }
-
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 20px;
-      line-height: 1.5;
-    }
-    .container { max-width: 1100px; margin: 0 auto; }
-    header { text-align: center; margin-bottom: 32px; }
-    h1 { font-size: 2.6rem; color: white; }
-    .subtitle { color: var(--text-muted); font-size: 1.1rem; }
-    h2, h3 { color: white; }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-    }
-    .form-group { margin-bottom: 20px; }
-    label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text); }
-    input, select, textarea, button {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: #11151c;
-      color: var(--text);
-      font-size: 1rem;
-    }
-    input::placeholder, textarea::placeholder { color: #64748b; }
-    textarea { min-height: 90px; resize: vertical; }
-    button {
-      background: var(--primary);
-      color: white;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    button:hover { background: var(--primary-dark); transform: translateY(-1px); }
-    .btn-success {
-      background: var(--success);
-    }
-    .btn-success:hover { background: var(--success-dark); }
-    .vehicle-item {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 16px;
-      background: #11151c;
-    }
-    .urgent { border-left: 5px solid var(--urgent-border); background: rgba(225,29,72,0.12); }
-    .completed {
-      background: rgba(22,101,52,0.18);
-      border-left: 5px solid var(--success);
-      opacity: 0.9;
-    }
-    .task-list { margin-top: 12px; padding-left: 16px; }
-    .task-item {
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-    }
-    .done { text-decoration: line-through; color: var(--text-muted); }
-    .badge {
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: bold;
-    }
-    .badge-urgent { background: var(--primary); color: white; }
-    .badge-done { background: var(--success); color: white; }
-    #order-suggestion {
-      background: rgba(202,138,4,0.08);
-      border: 1px solid rgba(202,138,4,0.3);
-    }
-    .actions { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
-    .obs-text {
-      margin: 10px 0;
-      padding: 10px;
-      background: rgba(71,85,105,0.3);
-      border-radius: 6px;
-      white-space: pre-wrap;
-      color: #cbd5e1;
-    }
-    footer {
-      text-align: center;
-      margin-top: 48px;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-    @media (max-width: 600px) {
-      .vehicle-header { flex-direction: column; align-items: flex-start; }
-      .vehicle-header h3 { margin-bottom: 10px; }
-      .actions { flex-direction: column; gap: 10px; }
-    }
-  </style>
-</head>
-<body>
-<div class="container">
-  <header>
-    <h1>Oficina Flow</h1>
-    <p class="subtitle">Gerenciador de demandas • Prioriza urgentes e rápidos</p>
-  </header>
-
-  <div class="card">
-    <h2>Adicionar Veículo</h2>
-    <div class="form-group">
-      <label>Placa / Apelido</label>
-      <input type="text" id="placa" placeholder="Ex: ABC1D23 ou Gol do João" />
-    </div>
-    <div class="form-group">
-      <label>Modelo / Ano</label>
-      <input type="text" id="modelo" placeholder="Ex: Gol G5 2012" />
-    </div>
-    <div class="form-group">
-      <label>Urgente?</label>
-      <select id="urgente">
-        <option value="false">Não</option>
-        <option value="true">Sim</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Observações (opcional)</label>
-      <textarea id="obs" placeholder="Ex: Cliente pediu para ligar quando terminar • Barulho na suspensão dianteira • Precisa de orçamento antes de prosseguir • Peça X pendente de chegada..."></textarea>
-    </div>
-    <button onclick="adicionarVeiculo()">Adicionar Veículo</button>
-  </div>
-
-  <div class="card">
-    <h2>Adicionar Tarefa</h2>
-    <div class="form-group">
-      <label>Veículo (placa/apelido)</label>
-      <input type="text" id="tarefaPlaca" list="veiculosDatalist" placeholder="Digite ou selecione" />
-      <datalist id="veiculosDatalist"></datalist>
-    </div>
-    <div class="form-group">
-      <label>Descrição do serviço</label>
-      <input type="text" id="descricao" placeholder="Ex: Troca de óleo + filtro + alinhamento" />
-    </div>
-    <div class="form-group">
-      <label>Tempo estimado (minutos)</label>
-      <input type="number" id="tempo" min="1" value="60" />
-    </div>
-    <button onclick="adicionarTarefa()">Adicionar Tarefa</button>
-  </div>
-
-  <div class="card" id="order-suggestion">
-    <h2>Ordem Sugerida <small>(urgentes primeiro • depois mais rápidos)</small></h2>
-    <button onclick="gerarOrdemSugerida()" style="margin-bottom:16px;">Atualizar Ordem</button>
-    <div id="ordemLista" class="order-list"></div>
-  </div>
-
-  <div class="card">
-    <h2>Veículos na Oficina</h2>
-    <button onclick="listarVeiculos()" style="margin-bottom:16px;">Atualizar Lista</button>
-    <div id="veiculosLista" class="vehicles-list"></div>
-  </div>
-
-  <div class="card">
-    <h2>Estimativa de Mão de Obra Pendente</h2>
-    <button onclick="calcularCustoPendente()">Calcular</button>
-    <div id="custoResultado" style="margin-top:16px; font-size:1.15rem; font-weight:bold; color:#e0e7ff;"></div>
-  </div>
-
-  <footer>
-    Oficina Flow • Salva automaticamente no navegador • com observações + finalizar veículo
-  </footer>
-</div>
-
-<script>
-  const STORAGE_KEY = "oficinaFlowVeiculos";
-  let veiculos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  const custoHora = 180; // R$/hora – altere conforme sua oficina
-
-  function salvar() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(veiculos));
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-canvas-default: #0d1117;
+    --color-canvas-subtle: #161b22;
+    --color-border-default: #30363d;
+    --color-border-muted: #21262d;
+    --color-fg-default: #c9d1d9;
+    --color-fg-muted: #8b949e;
+    --color-accent-fg: #58a6ff;
+    --color-success-fg: #3fb950;
+    --color-danger-fg: #f85149;
+    --color-primer-shadow-highlight: rgba(255,255,255,0.08);
+    --color-primer-shadow-highlight-muted: rgba(255,255,255,0.04);
+    --color-scale-gray-0: #0d1117;
+    --color-scale-gray-1: #161b22;
+    --color-scale-gray-7: #c9d1d9;
   }
+}
 
-  function atualizarDatalist() {
-    const datalist = document.getElementById("veiculosDatalist");
-    datalist.innerHTML = "";
-    Object.keys(veiculos).forEach(placa => {
-      const opt = document.createElement("option");
-      opt.value = placa;
-      datalist.appendChild(opt);
-    });
-  }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-  function adicionarVeiculo() {
-    const placa = document.getElementById("placa").value.trim().toUpperCase();
-    const modelo = document.getElementById("modelo").value.trim();
-    const urgente = document.getElementById("urgente").value === "true";
-    const obs = document.getElementById("obs").value.trim();
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  background: var(--color-canvas-default);
+  color: var(--color-fg-default);
+  min-height: 100vh;
+  padding: 32px 16px;
+  line-height: 1.5;
+  font-size: 16px;
+}
 
-    if (!placa || !modelo) return alert("Preencha placa e modelo!");
-    if (veiculos[placa]) return alert("Veículo já cadastrado!");
+.container { max-width: 1280px; margin: 0 auto; }
 
-    veiculos[placa] = {
-      modelo,
-      urgente,
-      observacoes: obs,
-      tarefas: [],
-      concluido: false,
-      data: new Date().toLocaleString("pt-BR")
-    };
+header { text-align: center; margin-bottom: 48px; }
+h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 8px; }
+.subtitle { color: var(--color-fg-muted); font-size: 1.1rem; }
 
-    salvar();
-    atualizarDatalist();
-    alert(`Veículo ${placa} adicionado!`);
-    document.getElementById("placa").value = "";
-    document.getElementById("modelo").value = "";
-    document.getElementById("obs").value = "";
-  }
+.card {
+  background: var(--color-canvas-subtle);
+  border: 1px solid var(--color-border-default);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 1px 0 rgba(27,31,36,0.04);
+}
 
-  function adicionarTarefa() {
-    const placa = document.getElementById("tarefaPlaca").value.trim().toUpperCase();
-    const desc = document.getElementById("descricao").value.trim();
-    const tempo = parseInt(document.getElementById("tempo").value) || 60;
+@media (prefers-color-scheme: dark) {
+  .card { box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
+}
 
-    if (!veiculos[placa]) return alert("Veículo não encontrado!");
-    if (!desc) return alert("Digite a descrição!");
-    if (tempo < 1) return alert("Tempo deve ser maior que 0!");
+h2, h3 { font-weight: 600; margin-bottom: 16px; }
 
-    veiculos[placa].tarefas.push({ descricao: desc, tempoEstimado: tempo, concluida: false });
-    salvar();
-    alert("Tarefa adicionada!");
-    document.getElementById("tarefaPlaca").value = "";
-    document.getElementById("descricao").value = "";
-    document.getElementById("tempo").value = "60";
-  }
+.form-group { margin-bottom: 20px; }
+label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.95rem; }
 
-  function toggleConcluida(placa, index) {
-    veiculos[placa].tarefas[index].concluida = !veiculos[placa].tarefas[index].concluida;
-    salvar();
-    listarVeiculos();
-    gerarOrdemSugerida();
-  }
+input, select, textarea, button {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 6px;
+  background: var(--color-canvas-default);
+  color: var(--color-fg-default);
+  font-size: 1rem;
+  font-family: inherit;
+}
 
-  function finalizarVeiculo(placa) {
-    if (!confirm(`Finalizar o veículo ${placa}?`)) return;
-    veiculos[placa].concluido = true;
-    veiculos[placa].tarefas.forEach(t => t.concluida = true);
-    salvar();
-    listarVeiculos();
-    gerarOrdemSugerida();
-  }
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-accent-fg);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(9,105,218,0.3);
+}
 
-  function reabrirVeiculo(placa) {
-    if (!confirm(`Reabrir o veículo ${placa}?`)) return;
-    veiculos[placa].concluido = false;
-    salvar();
-    listarVeiculos();
-    gerarOrdemSugerida();
-  }
+textarea { min-height: 100px; resize: vertical; }
 
-  function listarVeiculos() {
-    const container = document.getElementById("veiculosLista");
-    container.innerHTML = "";
+button {
+  background: var(--color-accent-fg);
+  color: white;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+  padding: 8px 16px;
+}
 
-    if (!Object.keys(veiculos).length) {
-      container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Nenhum veículo cadastrado.</p>';
-      return;
-    }
+button:hover { background: #005cc5; }
 
-    Object.entries(veiculos).forEach(([placa, info]) => {
-      let html = `
-        <div class="vehicle-item ${info.urgente ? 'urgent' : ''} ${info.concluido ? 'completed' : ''}">
-          <div class="vehicle-header" style="display:flex;justify-content:space-between;align-items:center;">
-            <h3>${placa} — ${info.modelo}</h3>
-            ${info.urgente ? '<span class="badge badge-urgent">URGENTE</span>' : ''}
-            ${info.concluido ? '<span class="badge badge-done">CONCLUÍDO</span>' : ''}
-          </div>
-          <small style="color:var(--text-muted);">Entrada: ${info.data}</small>`;
+.btn-success {
+  background: var(--color-success-fg);
+}
+.btn-success:hover { background: #157a2f; }
 
-      if (info.observacoes) {
-        html += `<div class="obs-text"><strong>Observações:</strong><br>${info.observacoes}</div>`;
-      }
+.vehicle-item {
+  border: 1px solid var(--color-border-default);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: var(--color-canvas-default);
+}
 
-      html += `<div class="task-list">`;
+.urgent { border-left: 4px solid var(--color-danger-fg); background: rgba(207,34,46,0.05); }
+.completed { background: rgba(31,127,55,0.05); border-left: 4px solid var(--color-success-fg); }
 
-      let pendenteMin = 0;
-      info.tarefas.forEach((t, i) => {
-        if (!t.concluida) pendenteMin += t.tempoEstimado;
-        html += `
-          <div class="task-item">
-            <span class="${t.concluida ? 'done' : ''}">${t.descricao} (${t.tempoEstimado} min)</span>
-            <button onclick="toggleConcluida('${placa}', ${i})" style="padding:6px 12px;font-size:0.9rem;">
-              ${t.concluida ? '↺ Reabrir' : '✓ Concluir'}
-            </button>
-          </div>`;
-      });
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border-muted);
+}
 
-      html += `</div>
-        <p style="margin:12px 0;font-weight:bold;color:#cbd5e1;">
-          Tempo pendente: ${pendenteMin} min (${(pendenteMin/60).toFixed(1)} h)
-        </p>
-        <div class="actions">
-          ${info.concluido 
-            ? `<button class="btn-success" onclick="reabrirVeiculo('${placa}')">Reabrir Veículo</button>`
-            : `<button class="btn-success" onclick="finalizarVeiculo('${placa}')">Finalizar Veículo</button>`
-          }
-        </div>
-      </div>`;
+.task-item:last-child { border-bottom: none; }
 
-      container.innerHTML += html;
-    });
-  }
+.done { text-decoration: line-through; color: var(--color-fg-muted); }
 
-  function gerarOrdemSugerida() {
-    const container = document.getElementById("ordemLista");
-    container.innerHTML = "";
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
 
-    let pendentes = [];
-    Object.entries(veiculos).forEach(([placa, info]) => {
-      if (info.concluido) return;
-      info.tarefas.forEach(t => {
-        if (!t.concluida) {
-          pendentes.push({ placa, modelo: info.modelo, urgente: info.urgente, desc: t.descricao, tempo: t.tempoEstimado });
-        }
-      });
-    });
+.badge-urgent { background: var(--color-danger-fg); color: white; }
+.badge-done { background: var(--color-success-fg); color: white; }
 
-    pendentes.sort((a,b) => b.urgente - a.urgente || a.tempo - b.tempo);
+#order-suggestion {
+  background: var(--color-canvas-subtle);
+  border-color: var(--color-border-muted);
+}
 
-    if (!pendentes.length) {
-      container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Nenhuma tarefa pendente.</p>';
-      return;
-    }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
 
-    pendentes.forEach(t => {
-      container.innerHTML += `
-        <div class="vehicle-item" style="margin-bottom:12px;">
-          <strong>${t.placa} — ${t.modelo}</strong><br>
-          ${t.desc} (${t.tempo} min)
-          ${t.urgente ? '<span class="badge badge-urgent" style="margin-left:10px;">URGENTE</span>' : ''}
-        </div>`;
-    });
-  }
+.obs-text {
+  margin: 12px 0;
+  padding: 12px;
+  background: var(--color-scale-gray-1);
+  border: 1px solid var(--color-border-muted);
+  border-radius: 6px;
+  white-space: pre-wrap;
+  color: var(--color-fg-default);
+}
 
-  function calcularCustoPendente() {
-    let totalMin = 0;
-    Object.values(veiculos).forEach(v => {
-      if (v.concluido) return;
-      v.tarefas.forEach(t => { if (!t.concluida) totalMin += t.tempoEstimado; });
-    });
-    const horas = totalMin / 60;
-    const valor = horas * custoHora;
-    document.getElementById("custoResultado").innerHTML = 
-      `Total pendente: ${totalMin} minutos (${horas.toFixed(1)} h)<br>` +
-      `Valor estimado mão de obra: R$ ${valor.toFixed(2).replace('.', ',')}`;
-  }
+footer {
+  text-align: center;
+  margin-top: 64px;
+  color: var(--color-fg-muted);
+  font-size: 0.9rem;
+}
 
-  // Inicializa
-  atualizarDatalist();
-  listarVeiculos();
-  gerarOrdemSugerida();
-</script>
-</body>
-</html>
+@media (max-width: 768px) {
+  .actions { flex-direction: column; }
+  body { padding: 16px; }
+}
